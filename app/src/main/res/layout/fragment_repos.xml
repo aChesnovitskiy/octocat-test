@@ -14,7 +14,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/repos_toolbar"
-            style="@style/ToolbarStyle"
+            style="@style/ToolbarDarkStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name" />
@@ -24,7 +24,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/repos_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:listitem="@layout/item_repo" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

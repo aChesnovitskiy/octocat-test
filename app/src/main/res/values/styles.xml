@@ -9,8 +9,15 @@
         <item name="colorSecondaryVariant">@color/color_accent_dark</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorControlHighlight">@color/color_control_highlight</item>
+        <item name="android:colorBackground">@color/color_background</item>
     </style>
 
-    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Primary" />
+    <style name="ToolbarDarkStyle" parent="Widget.MaterialComponents.Toolbar.Primary" />
+
+    <style name="ToolbarLightStyle" parent="Widget.MaterialComponents.Toolbar.Surface" />
+
+    <style name="ToolbarLightTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/color_primary</item>
+    </style>
 
 </resources>

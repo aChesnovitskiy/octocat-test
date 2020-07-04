@@ -1,11 +1,11 @@
 package com.achesnovitskiy.octocattest.ui.repoinfo
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.achesnovitskiy.octocattest.R
-import com.achesnovitskiy.octocattest.data.Repo
 import com.achesnovitskiy.octocattest.viewmodels.repoinfo.RepoInfoViewModel
 import kotlinx.android.synthetic.main.fragment_repo_info.*
 
@@ -18,7 +18,22 @@ class RepoInfoFragment : Fragment(R.layout.fragment_repo_info) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        setupToolbar()
         setupViewModel()
+    }
+
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(repo_info_toolbar)
+            supportActionBar?.apply {
+                setDisplayShowTitleEnabled(false)
+                setDisplayHomeAsUpEnabled(true)
+            }
+
+            repo_info_toolbar.setNavigationOnClickListener {
+                this.onBackPressed()
+            }
+        }
     }
 
     private fun setupViewModel() {

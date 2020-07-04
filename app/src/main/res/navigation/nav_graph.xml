@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_repos" >
         <action
             android:id="@+id/action_repositoriesFragment_to_repoInfoFragment"
-            app:destination="@id/repoInfoFragment" />
+            app:destination="@id/repoInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
