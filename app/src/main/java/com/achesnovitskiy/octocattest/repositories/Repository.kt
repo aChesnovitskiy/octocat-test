@@ -2,9 +2,11 @@ package com.achesnovitskiy.octocattest.repositories
 
 import com.achesnovitskiy.empoyees.api.ApiFactory
 import com.achesnovitskiy.octocattest.data.Repo
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 object Repository {
     private val apiFactory = ApiFactory
@@ -12,8 +14,8 @@ object Repository {
     private var repos = mutableListOf<Repo>()
     private val compositeDisposable = CompositeDisposable()
 
-    fun loadReposFromApi(user: String, callback: (List<Repo>) -> Unit) {
-        val disposable = apiService.getReposByUser(user)
+    fun loadReposFromApi(userName: String, callback: (List<Repo>) -> Unit) {
+        val disposable = apiService.getReposByUser(userName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -25,6 +27,24 @@ object Repository {
                 },
                 {
                     callback(repos)
+                }
+            )
+        compositeDisposable.add(disposable)
+    }
+
+    fun isNeedLoadRepos(callback: (isNeed: Boolean) -> Unit) {
+        val disposable = Single.fromCallable {
+            repos.isEmpty()
+        }
+            .delay(2000, TimeUnit.MILLISECONDS) // TODO remove
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->
+                    callback(result)
+                },
+                { error ->
+                    error.printStackTrace()
                 }
             )
         compositeDisposable.add(disposable)

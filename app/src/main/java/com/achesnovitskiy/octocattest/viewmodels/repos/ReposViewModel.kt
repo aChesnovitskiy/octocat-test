@@ -1,6 +1,5 @@
 package com.achesnovitskiy.octocattest.viewmodels.repos
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +15,9 @@ class ReposViewModel : ViewModel() {
 
     fun getState(): LiveData<ReposState> = state
 
-    fun getRepos(): LiveData<List<Repo>> {
+    fun getRepos(userName: String): LiveData<List<Repo>> {
+        loadReposFromApi(userName)
+
         val result = MediatorLiveData<List<Repo>>()
 
         val filterF = {
@@ -33,9 +34,16 @@ class ReposViewModel : ViewModel() {
         return result
     }
 
-    fun loadReposFromApi(user: String) {
-        Repository.loadReposFromApi(user) {
-            repos.value = it
+    private fun loadReposFromApi(userName: String) {
+        Repository.isNeedLoadRepos { isNeed ->
+            if (isNeed) {
+                updateState { it.copy(isLoading = true) }
+                Repository.loadReposFromApi(userName) {
+                    repos.value = it
+                }
+            } else {
+                updateState { it.copy(isLoading = false) }
+            }
         }
     }
 
@@ -51,7 +59,6 @@ class ReposViewModel : ViewModel() {
     private fun updateState(update: (currentState: ReposState) -> ReposState) {
         val updatedState = update(state.value!!)
         state.value = updatedState
-        Log.d("My_ReposViewModel", "${state.value}")
     }
 
     fun disposeDisposables() {

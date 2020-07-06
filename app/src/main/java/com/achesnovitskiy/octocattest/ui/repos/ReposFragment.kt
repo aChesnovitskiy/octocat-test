@@ -109,6 +109,8 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
 
             repos_progress_bar.indeterminateDrawable = DrawableCompat.unwrap(drawableProgress)
         }
+
+        binding.isLoading
     }
 
     private fun setupViewModel() {
@@ -121,9 +123,7 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
                     }
                 )
 
-                loadReposFromApi(USER_OCTOCAT)
-
-                getRepos().observe(
+                getRepos(USER_OCTOCAT).observe(
                     viewLifecycleOwner,
                     Observer { repos ->
                         repos_list_is_empty_text_view.visibility =
