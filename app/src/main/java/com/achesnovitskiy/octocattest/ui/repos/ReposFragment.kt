@@ -1,6 +1,10 @@
 package com.achesnovitskiy.octocattest.ui.repos
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,11 +20,44 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
     private lateinit var reposViewModel: ReposViewModel
     private lateinit var reposAdapter: ReposAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        setupToolbar()
         setupViewModel()
         setupRecyclerView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.apply {
+            queryHint = getString(R.string.search)
+
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+//                viewModel.handleSearchQuery(query)
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+//                viewModel.handleSearchQuery(newText)
+                    return true
+                }
+            })
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun setupToolbar() {
+        (activity as AppCompatActivity).setSupportActionBar(repos_toolbar)
     }
 
     private fun setupViewModel() {
