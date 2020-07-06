@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@android:color/white"
+    android:orientation="vertical"
     tools:context=".ui.repos.ReposFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/repo_info_appbar"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/repo_info_toolbar"
+        style="@style/ToolbarLightStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/repo_info_toolbar"
-            style="@style/ToolbarLightStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolbarLightTheme"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ToolbarLightTheme" />
 
     <TextView
         android:id="@+id/repo_name_text_view"
