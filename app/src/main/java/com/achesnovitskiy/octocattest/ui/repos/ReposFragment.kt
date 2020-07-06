@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -120,6 +121,8 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
                 getRepos().observe(
                     viewLifecycleOwner,
                     Observer { repos ->
+                        repos_list_is_empty_text_view.visibility =
+                            if (repos.isNullOrEmpty()) View.VISIBLE else View.GONE
                         reposAdapter.updateRepos(repos)
                     }
                 )
