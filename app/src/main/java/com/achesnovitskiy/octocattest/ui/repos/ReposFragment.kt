@@ -87,6 +87,11 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onDestroy() {
+        reposViewModel.disposeDisposables()
+        super.onDestroy()
+    }
+
     private fun setupToolbar() {
         (activity as AppCompatActivity).setSupportActionBar(repos_toolbar)
     }

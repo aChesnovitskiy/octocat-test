@@ -6,12 +6,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.achesnovitskiy.octocattest.data.Repo
+import com.achesnovitskiy.octocattest.repositories.Repository
 
 class ReposViewModel : ViewModel() {
     private val state = MutableLiveData<ReposState>().apply {
         value = ReposState()
     }
-    private val repos = MutableLiveData<List<Repo>>()
+    private val repos = MutableLiveData<List<Repo>>(listOf())
 
     fun getState(): LiveData<ReposState> = state
 
@@ -33,13 +34,9 @@ class ReposViewModel : ViewModel() {
     }
 
     fun loadReposFromApi(user: String) {
-        repos.value = listOf(
-            Repo(1, "Hello World!"),
-            Repo(2, "Repo 2 $user"),
-            Repo(2, "Repo 3 $user"),
-            Repo(2, "Repo 4 $user"),
-            Repo(2, "Repo 5 $user")
-        )
+        Repository.loadReposFromApi(user) {
+            repos.value = it
+        }
     }
 
     fun handleSearchQuery(query: String?) {
@@ -55,6 +52,10 @@ class ReposViewModel : ViewModel() {
         val updatedState = update(state.value!!)
         state.value = updatedState
         Log.d("My_ReposViewModel", "${state.value}")
+    }
+
+    fun disposeDisposables() {
+        Repository.disposeDisposables()
     }
 }
 
