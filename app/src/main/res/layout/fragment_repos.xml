@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_repo" />
 
-        <ProgressBar
+        <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/repos_progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
