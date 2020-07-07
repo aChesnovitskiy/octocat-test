@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.fragment_repos.*
 import rx.Subscription
 import rx.subjects.BehaviorSubject
 
-
 class ReposFragment : Fragment(R.layout.fragment_repos) {
     private lateinit var reposViewModel: ReposViewModel
     private lateinit var reposAdapter: ReposAdapter
@@ -104,7 +103,7 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
     }
 
     private fun setupProgressBar() {
-        // Set progress bar color for API < 21
+        // Set progress bar color for pre-lollipop devices
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             val drawableProgress =
                 DrawableCompat.wrap(repos_progress_bar.indeterminateDrawable)
