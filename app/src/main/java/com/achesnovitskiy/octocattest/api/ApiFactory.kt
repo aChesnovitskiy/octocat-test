@@ -9,7 +9,6 @@ import java.security.KeyManagementException
 import java.security.KeyStoreException
 import java.security.NoSuchAlgorithmException
 
-
 object ApiFactory {
     private const val BASE_URL = "https://api.github.com/"
     private var retrofit: Retrofit
