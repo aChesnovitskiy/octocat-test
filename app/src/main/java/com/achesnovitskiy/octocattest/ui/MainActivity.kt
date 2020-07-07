@@ -1,7 +1,8 @@
-package com.achesnovitskiy.octocattest
+package com.achesnovitskiy.octocattest.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.achesnovitskiy.octocattest.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
