@@ -21,6 +21,7 @@ import com.achesnovitskiy.octocattest.data.Repo
 import com.achesnovitskiy.octocattest.viewmodels.repos.ReposState
 import com.achesnovitskiy.octocattest.viewmodels.repos.ReposViewModel
 import kotlinx.android.synthetic.main.fragment_repos.*
+import rx.subjects.BehaviorSubject
 
 
 class ReposFragment : Fragment(R.layout.fragment_repos) {
@@ -110,7 +111,9 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
             repos_progress_bar.indeterminateDrawable = DrawableCompat.unwrap(drawableProgress)
         }
 
-        binding.isLoading
+        binding.isLoading.subscribe { isLoading ->
+            repos_progress_bar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
     }
 
     private fun setupViewModel() {
@@ -163,12 +166,12 @@ class ReposFragment : Fragment(R.layout.fragment_repos) {
     inner class ReposBinding {
         var searchQuery: String? = null
         var isSearch: Boolean = false
-        var isLoading: Boolean = false
+        var isLoading: BehaviorSubject<Boolean> = BehaviorSubject.create(false)
 
         fun bind(state: ReposState) {
             isSearch = state.isSearch
             searchQuery = state.searchQuery
-            isLoading = state.isLoading
+            isLoading.onNext(state.isLoading)
         }
     }
 }

@@ -36,7 +36,6 @@ object Repository {
         val disposable = Single.fromCallable {
             repos.isEmpty()
         }
-            .delay(2000, TimeUnit.MILLISECONDS) // TODO remove
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
