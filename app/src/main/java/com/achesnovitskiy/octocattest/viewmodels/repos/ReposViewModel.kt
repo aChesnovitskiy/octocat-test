@@ -1,5 +1,6 @@
 package com.achesnovitskiy.octocattest.viewmodels.repos
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import com.achesnovitskiy.octocattest.data.Repo
 import com.achesnovitskiy.octocattest.repositories.Repository
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -16,6 +18,8 @@ class ReposViewModel : ViewModel() {
         value = ReposState()
     }
     private val repos = MutableLiveData<List<Repo>>(listOf())
+
+    private val compositeDisposable = CompositeDisposable()
 
     fun getState(): LiveData<ReposState> = state
 
@@ -39,23 +43,29 @@ class ReposViewModel : ViewModel() {
     }
 
     private fun loadReposFromApi(userName: String) {
-        Repository.isNeedLoadRepos { isNeed ->
-            if (isNeed) {
-                updateState { it.copy(isLoading = true) }
-                Repository.loadReposFromApi(userName) {reposFromApi ->
-                    repos.value = reposFromApi
-                    updateState { it.copy(isLoading = false) }
-                }
-            } else {
-                // Idle delay for showing progress bar
-                Completable.timer(1500, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe{
+        val disposable = Repository.isNeedLoadRepos()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { isNeed ->
+                Log.d("My_ReposViewModel", isNeed.toString())
+                if (isNeed) {
+                    updateState { it.copy(isLoading = true) }
+                    Repository.loadReposFromApi(userName) { reposFromApi ->
+                        repos.value = reposFromApi
                         updateState { it.copy(isLoading = false) }
                     }
+                } else {
+                    // Idle delay for showing progress bar
+                    val disposable = Completable.timer(1500, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            updateState { it.copy(isLoading = false) }
+                        }
+                    compositeDisposable.add(disposable)
+                }
             }
-        }
+        compositeDisposable.add(disposable)
     }
 
     fun updateRepos(userName: String) {
@@ -78,6 +88,8 @@ class ReposViewModel : ViewModel() {
     }
 
     fun disposeDisposables() {
+        // FIXME if it is used, Repository.isNeedLoadRepos() is not repeat when change configuration
+//        compositeDisposable.dispose()
         Repository.disposeDisposables()
     }
 }

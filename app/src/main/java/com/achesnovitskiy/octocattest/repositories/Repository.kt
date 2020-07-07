@@ -31,22 +31,7 @@ object Repository {
         compositeDisposable.add(disposable)
     }
 
-    fun isNeedLoadRepos(callback: (isNeed: Boolean) -> Unit) {
-        val disposable = Single.fromCallable {
-            repos.isEmpty()
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { result ->
-                    callback(result)
-                },
-                { error ->
-                    error.printStackTrace()
-                }
-            )
-        compositeDisposable.add(disposable)
-    }
+    fun isNeedLoadRepos(): Single<Boolean> = Single.fromCallable { repos.isEmpty() }
 
     fun disposeDisposables() {
         compositeDisposable.dispose()
