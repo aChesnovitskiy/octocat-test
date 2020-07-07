@@ -39,9 +39,9 @@ class ReposViewModel : ViewModel() {
     }
 
     private fun loadReposFromApi(userName: String) {
-        updateState { it.copy(isLoading = true) }
         Repository.isNeedLoadRepos { isNeed ->
             if (isNeed) {
+                updateState { it.copy(isLoading = true) }
                 Repository.loadReposFromApi(userName) {reposFromApi ->
                     repos.value = reposFromApi
                     updateState { it.copy(isLoading = false) }
@@ -59,6 +59,7 @@ class ReposViewModel : ViewModel() {
     }
 
     fun updateRepos(userName: String) {
+        updateState { it.copy(isLoading = true) }
         loadReposFromApi(userName)
     }
 
