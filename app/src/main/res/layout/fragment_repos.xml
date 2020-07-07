@@ -30,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="@dimen/font_size_large_18"
-            android:text="@string/list_is_empty"/>
+            android:text="@string/list_is_empty"
+            android:textSize="@dimen/font_size_large_18" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/repos_recycler_view"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </FrameLayout>
 

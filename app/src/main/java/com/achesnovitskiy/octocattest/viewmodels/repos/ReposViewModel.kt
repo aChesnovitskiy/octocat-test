@@ -6,6 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.achesnovitskiy.octocattest.data.Repo
 import com.achesnovitskiy.octocattest.repositories.Repository
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class ReposViewModel : ViewModel() {
     private val state = MutableLiveData<ReposState>().apply {
@@ -35,17 +39,27 @@ class ReposViewModel : ViewModel() {
     }
 
     private fun loadReposFromApi(userName: String) {
+        updateState { it.copy(isLoading = true) }
         Repository.isNeedLoadRepos { isNeed ->
             if (isNeed) {
-                updateState { it.copy(isLoading = true) }
                 Repository.loadReposFromApi(userName) {reposFromApi ->
                     repos.value = reposFromApi
                     updateState { it.copy(isLoading = false) }
                 }
             } else {
-                updateState { it.copy(isLoading = false) }
+                // Idle delay for showing progress bar
+                Completable.timer(1500, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe{
+                        updateState { it.copy(isLoading = false) }
+                    }
             }
         }
+    }
+
+    fun updateRepos(userName: String) {
+        loadReposFromApi(userName)
     }
 
     fun handleSearchQuery(query: String?) {
